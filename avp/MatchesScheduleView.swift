@@ -8,6 +8,8 @@
 import SwiftUI
 
 class TournamentMatches: ObservableObject {
+    private let matchService: MatchServiceAPI
+    
     @Published var loadingInitial = true
     @Published var matches: Matches = []
     @Published var selectedDate: Date = Date.now
@@ -46,7 +48,8 @@ class TournamentMatches: ObservableObject {
         }
     }
     
-    init() {
+    init(matchService: MatchServiceAPI) {
+        self.matchService = matchService
         loadMatches()
     }
     
@@ -54,7 +57,7 @@ class TournamentMatches: ObservableObject {
         loadingInitial = true
         Task {
             do {
-                let matches = try await MatchService.getMatches()
+                let matches = try await matchService.getMatches()
                 DispatchQueue.main.async {
                     self.matches = matches
                     self.selectedDate = self.datesSorted().first!
@@ -68,7 +71,7 @@ class TournamentMatches: ObservableObject {
 }
 
 struct MatchesScheduleView: View {
-    @StateObject var tournamentMatches = TournamentMatches()
+    @ObservedObject var tournamentMatches: TournamentMatches
     
     private func name(for courtId: String) -> String {
         if courtId == "ST" {
@@ -119,6 +122,10 @@ struct MatchesScheduleView: View {
 
 struct MatchesScheduleView_Previews: PreviewProvider {
     static var previews: some View {
-        MatchesScheduleView()
+        NavigationView {
+            MatchesScheduleView(tournamentMatches: TournamentMatches(matchService: MatchService_Preview()))
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Schedule")
+        }
     }
 }

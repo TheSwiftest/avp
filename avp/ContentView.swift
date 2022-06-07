@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {    
     var body: some View {
         NavigationView {
-            MatchesScheduleView()
+            MatchesScheduleView(tournamentMatches: TournamentMatches(matchService: MatchService()))
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle("Schedule")
         }

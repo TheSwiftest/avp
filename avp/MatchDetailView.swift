@@ -34,42 +34,167 @@ struct MatchDetailResultsView: View {
     let match: Match
     
     var body: some View {
-        VStack {
-            HStack {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible(minimum: 125)), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], alignment: .center) {
+            Group {
+                Spacer()
+                Text("Team")
+                Text("Set 1")
+                Text("Set 2")
+                Text("Set 3")
+                Text("Won")
+            }
+            .font(.caption)
+            
+            Group {
+                Text("#\(match.teamA!.seed)")
+                HStack {
+                    VStack(alignment: .leading) {
+                        Group {
+                            Text(match.teamA!.captain.lastName)
+                            Text(match.teamA!.player.lastName)
+                        }.lineLimit(1)
+                    }
+                    Spacer()
+                }
+                
+                if let sets = match.sets {
+                    if sets.count > 0 {
+                        Text("\(sets[0].a)")
+                    } else {
+                        Spacer()
+                    }
+                    
+                    if sets.count > 1 {
+                        Text("\(sets[1].a)")
+                    } else {
+                        Spacer()
+                    }
+                    
+                    if sets.count > 2 {
+                        Text("\(sets[2].a)")
+                    } else {
+                        Spacer()
+                    }
+                } else {
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                }
+                
+                Text("\(match.setsWonA)")
+            }
+            
+            Group {
+                Spacer()
+                HStack {
+                    Text("T/O Remaining")
+                        .font(.caption)
+                    Spacer()
+                }
                 Group {
-                    Text("Team")
-                    Text("Sets Won")
-                    Text("Set 1")
-                    Text("Set 2")
-                    Text("Set 3")
+                    if let sets = match.sets {
+                        if sets.count > 0 {
+                            Text("\(1 - sets[0].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                        
+                        if sets.count > 1 {
+                            Text("\(1 - sets[1].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                        
+                        if sets.count > 2 {
+                            Text("\(1 - sets[2].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                    } else {
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    }
                 }
                 .font(.caption)
+                Spacer()
             }
-            HStack {
-                Text("#\(match.teamA!.seed)")
-                VStack(alignment: .leading) {
-                    Text(match.teamA!.captain.fullName)
-                    Text(match.teamA!.player.fullName)
+            
+            Group {
+                Text("#\(match.teamB!.seed)")
+                HStack {
+                    VStack(alignment: .leading) {
+                        Group {
+                            Text(match.teamB!.captain.lastName)
+                            Text(match.teamB!.player.lastName)
+                        }.lineLimit(1)
+                    }
+                    Spacer()
                 }
-                Text("\(match.setsWonA)")
-                Text("\(match.sets![0].a)")
-                Text("\(match.sets![1].a)")
-                Text("\(match.sets![2].a)")
-            }
-            HStack {
                 
+                if let sets = match.sets {
+                    if sets.count > 0 {
+                        Text("\(sets[0].b)")
+                    } else {
+                        Spacer()
+                    }
+                    
+                    if sets.count > 1 {
+                        Text("\(sets[1].b)")
+                    } else {
+                        Spacer()
+                    }
+                    
+                    if sets.count > 2 {
+                        Text("\(sets[2].b)")
+                    } else {
+                        Spacer()
+                    }
+                } else {
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                }
+                
+                Text("\(match.setsWonB)")
+            }
+            
+            Group {
+                Spacer()
+                HStack {
+                    Text("T/O Remaining")
+                        .font(.caption)
+                    Spacer()
+                }
+                Group {
+                    if let sets = match.sets {
+                        if sets.count > 0 {
+                            Text("\(1 - sets[0].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                        
+                        if sets.count > 1 {
+                            Text("\(1 - sets[1].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                        
+                        if sets.count > 2 {
+                            Text("\(1 - sets[2].timeoutsTakenA)")
+                        } else {
+                            Spacer()
+                        }
+                    } else {
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    }
+                }
+                .font(.caption)
+                Spacer()
             }
         }
-//        HStack {
-//            VStack(alignment: .center) {
-//                Text("Team")
-//                    .font(.caption)
-//                Text(match.teamA!.captain.fullName)
-//                Text(match.teamA!.player.fullName)
-//                Text("T/O Remaining")
-//                    .font(.caption2)
-//            }
-//        }
     }
 }
 
@@ -78,6 +203,5 @@ struct MatchDetailView_Previews: PreviewProvider {
         Group {
             MatchDetailView(match: testMatches[0])
         }
-        .previewLayout(.sizeThatFits)
     }
 }

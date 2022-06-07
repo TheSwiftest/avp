@@ -7,13 +7,16 @@
 
 import Foundation
 
-class MatchService: ObservableObject {
-    
-    enum MatchServiceError: Error {
-        case invalidUrl
-    }
-    
-    static func getMatches() async throws -> Matches {
+enum MatchServiceError: Error {
+    case invalidUrl
+}
+
+protocol MatchServiceAPI {
+    func getMatches() async throws -> Matches
+}
+
+class MatchService: MatchServiceAPI {
+    func getMatches() async throws -> Matches {
         guard let url = URL(string: "https://volleyballapi.web4data.co.uk/api/matches/byevent/28") else {
             throw MatchServiceError.invalidUrl
         }
@@ -26,6 +29,12 @@ class MatchService: ObservableObject {
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
         return try decoder.decode(Matches.self, from: data)
+    }
+}
+
+class MatchService_Preview: MatchServiceAPI {
+    func getMatches() async throws -> Matches {
+        return testMatches
     }
 }
             
